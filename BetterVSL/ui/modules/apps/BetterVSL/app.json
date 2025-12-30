@@ -1,0 +1,18 @@
+{
+    "domElement": "<bettervsl></bettervsl>",
+    "name": "Better Log Vehicle Stats",
+    "types": [
+      "ui.apps.categories.utility"
+    ],
+    "description": "Improved, easy to use version of VSL. App for researchers purposes. Here you can select which vehicle stats you want to log.",
+    "css": {
+      "left": "200px",
+      "height": "550px",
+      "top": "200px",
+      "width": "400px"
+    },
+    "author": "BeamNG",
+    "version": "1.0",
+    "preserveAspectRatio" : false,
+    "directive": "bettervsl"
+  }

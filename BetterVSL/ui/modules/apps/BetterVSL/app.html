@@ -1,0 +1,147 @@
+<div style="max-height:100%; width:100%; background:rgba(0, 0, 0, 0.43);color:white; padding: 10px;">
+  
+  <!-- Header Section -->
+  <div layout="row" layout-align="start center" style="margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
+    <span style="font-size: 16px; font-weight: bold;">VSS Logger</span>
+  </div>
+
+  <!-- Logging Controls -->
+  <div layout="column" style="margin-bottom: 15px;">
+    <div layout="row" layout-align="start center" style="margin-bottom: 8px;">
+      <span style="width: 120px;">Update Rate:</span>
+      <input type="number" min="0.01" max="1" step="0.01" ng-model="updateTime" style="width: 80px; margin-right: 5px;">
+      <span>seconds</span>
+    </div>
+
+<div layout="row" layout-align="start center" style="margin-bottom: 8px;">
+  <span style="width: 120px;">Output Format:</span>
+  <md-select ng-model="outputFormat" style="margin: 0;">
+    <md-option value="vss-jsonl">VSS JSONL (recommended)</md-option>
+    <md-option value="vss-csv">VSS CSV</md-option>
+    <md-option value="beamng">BeamNG CSV (Legacy)</md-option>
+  </md-select>
+</div>
+    <div layout="row" layout-align="start center" ng-show="outputFormat === 'vss'">
+      <span style="width: 120px;">VSS Version:</span>
+      <md-select ng-model="vssVersion" style="margin: 0;">
+        <md-option value="4.0">VSS 4.0</md-option>
+        <md-option value="3.0">VSS 3.0</md-option>
+      </md-select>
+    </div>
+  </div>
+
+  <!-- VSS Signal Categories -->
+  <div ng-show="outputFormat === 'vss'" layout="column" style="margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px;">
+    <span style="font-weight: bold; margin-bottom: 8px;">VSS Signal Categories:</span>
+    
+    <md-checkbox ng-model="vss_speed" aria-label="speed">
+      <span style="font-family: monospace;">Vehicle.Speed</span>
+      <span style="font-size: 11px; color: #aaa; margin-left: 10px;">(velocity, acceleration)</span>
+    </md-checkbox>
+
+    <md-checkbox ng-model="vss_powertrain" aria-label="powertrain">
+      <span style="font-family: monospace;">Vehicle.Powertrain</span>
+      <span style="font-size: 11px; color: #aaa; margin-left: 10px;">(engine, transmission)</span>
+    </md-checkbox>
+
+    <md-checkbox ng-model="vss_chassis" aria-label="chassis">
+      <span style="font-family: monospace;">Vehicle.Chassis</span>
+      <span style="font-size: 11px; color: #aaa; margin-left: 10px;">(wheels, brakes, steering)</span>
+    </md-checkbox>
+
+    <md-checkbox ng-model="vss_body" aria-label="body">
+      <span style="font-family: monospace;">Vehicle.Body</span>
+      <span style="font-size: 11px; color: #aaa; margin-left: 10px;">(lights, mirrors)</span>
+    </md-checkbox>
+
+    <md-checkbox ng-model="vss_location" aria-label="location">
+      <span style="font-family: monospace;">Vehicle.CurrentLocation</span>
+      <span style="font-size: 11px; color: #aaa; margin-left: 10px;">(position, altitude, heading)</span>
+    </md-checkbox>
+
+    <md-checkbox ng-model="vss_obd" aria-label="obd">
+      <span style="font-family: monospace;">Vehicle.OBD</span>
+      <span style="font-size: 11px; color: #aaa; margin-left: 10px;">(diagnostics)</span>
+    </md-checkbox>
+  </div>
+
+  <!-- Legacy BeamNG Modules -->
+  <div ng-show="outputFormat === 'beamng'" layout="column" style="margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px;">
+    <span style="font-weight: bold; margin-bottom: 8px;">BeamNG Modules (Legacy):</span>
+    
+    <md-checkbox ng-model="module_general" aria-label="general">General</md-checkbox>
+    <md-checkbox ng-model="module_wheels" aria-label="wheels">Wheels</md-checkbox>
+    <md-checkbox ng-model="module_engine" aria-label="engine">Engine</md-checkbox>
+    <md-checkbox ng-model="module_inputs" aria-label="inputs">Inputs</md-checkbox>
+    <md-checkbox ng-model="module_powertrain" aria-label="powertrain">Powertrain</md-checkbox>
+  </div>
+
+  <!-- Advanced Options (Collapsible) -->
+  <div layout="column" style="margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px;">
+    <md-checkbox ng-model="showAdvanced" aria-label="advanced">
+      <span style="font-weight: bold;">Advanced Options</span>
+    </md-checkbox>
+    
+    <div ng-show="showAdvanced" style="margin-left: 20px; margin-top: 8px;">
+      <div layout="row" layout-align="start center" style="margin-bottom: 5px;">
+        <md-checkbox ng-model="includeTimestamp" aria-label="timestamp">
+          Include Timestamps
+        </md-checkbox>
+      </div>
+      
+      <div layout="row" layout-align="start center" style="margin-bottom: 5px;">
+        <md-checkbox ng-model="includeMetadata" aria-label="metadata">
+          Include Vehicle Metadata
+        </md-checkbox>
+      </div>
+      
+      <div layout="row" layout-align="start center" style="margin-bottom: 5px;">
+        <md-checkbox ng-model="compressOutput" aria-label="compress">
+          Compress Output (gzip)
+        </md-checkbox>
+      </div>
+
+      <div layout="row" layout-align="start center" style="margin-top: 10px;">
+        <span style="width: 120px;">Buffer Size:</span>
+        <input type="number" min="100" max="10000" step="100" ng-model="bufferSize" style="width: 80px; margin-right: 5px;">
+        <span>samples</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Display -->
+  <div ng-show="isLogging" layout="column" style="background: rgba(50, 150, 50, 0.2); padding: 8px; border-radius: 4px; margin-bottom: 10px;">
+    <div layout="row" layout-align="space-between center">
+      <span style="color: #5f5;">● Recording</span>
+      <span style="font-family: monospace; font-size: 12px;">{{loggingTime}} sec</span>
+    </div>
+    <div style="font-size: 11px; color: #aaa; margin-top: 4px;">
+      {{samplesCollected}} samples | {{currentFile}}
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div layout="row" layout-align="start center" style="margin-top: 15px;">
+    <md-button md-no-ink class="md-raised md-primary" ng-click="startLogging()" ng-disabled="isLogging">
+      <span ng-show="!isLogging">Start Logging</span>
+      <span ng-show="isLogging">Logging...</span>
+    </md-button>
+    <md-button md-no-ink class="md-raised md-warn" ng-click="stopLogging()" ng-disabled="!isLogging">
+      Stop
+    </md-button>
+  </div>
+
+  <!-- Quick Actions -->
+  <div layout="row" layout-align="start center" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2);">
+    <md-button md-no-ink class="md-raised" ng-click="exportSettings()" style="font-size: 11px;">
+      Export Config
+    </md-button>
+    <md-button md-no-ink class="md-raised" ng-click="importSettings()" style="font-size: 11px;">
+      Import Config
+    </md-button>
+    <md-button md-no-ink class="md-raised" ng-click="openOutputFolder()" style="font-size: 11px;">
+      Open Output Folder
+    </md-button>
+  </div>
+
+</div>

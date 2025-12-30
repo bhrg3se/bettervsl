@@ -1,0 +1,7 @@
+{
+  "name": "Better Vehicle Stats Logger",
+  "author": "Bhargab Acharya",
+  "version": "1.0",
+  "description": "A mod to log vehicle telematics data",
+  "isUIApp": true
+}
